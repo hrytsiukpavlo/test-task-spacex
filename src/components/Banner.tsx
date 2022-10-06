@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import styled from "styled-components";
-import imgHome from "../assets/Home1.jpg";
+import Home1 from "../assets/Home1.jpg";
+import Home2 from "../assets/Home2.jpg";
+import Home3 from "../assets/Home3.jpg";
 import imgFavourites from "../assets/Home3.jpg";
 import { ReactComponent as DownArrow } from "../assets/DownArrow.svg";
 import { useLocation } from "react-router-dom";
@@ -13,9 +15,9 @@ type Props = {
 
 const BannerElement = styled.div<Props>`
 	width: 100%;
-	height: ${(props) => (props.path.pathname === "/" ? "740px" : "500px")};
+	height: ${(props) => (props.path.pathname === "/favourites" ? "500px" : "740px")};
 	background: rgba(0, 0, 0, 0.5)
-		url(${(props) => (props.path.pathname === "/" ? imgHome : imgFavourites)});
+		url(${(props) => (props.path.pathname === "/favourites" ? imgFavourites : "")});
 	background-blend-mode: darken;
 	background-position: ${(props) => (props.path.pathname === "/" ? "center" : "top")};
 	background-repeat: no-repeat;
@@ -24,12 +26,61 @@ const BannerElement = styled.div<Props>`
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	overflow: hidden;
+
+	.mySwiper {
+		width: 100%;
+		height: 100%;
+		position: absolute;
+
+		.swiper-wrapper {
+			position: absolute;
+			display: flex;
+
+			.swiper-slide {
+				img {
+					width: 100vw;
+					height: 740px;
+					filter: brightness(50%);
+				}
+			}
+		}
+
+		.swiper-pagination {
+			border: 1px solid red;
+			z-index: 10;
+			position: absolute;
+			display: flex;
+			justify-content: center;
+			top: 50%;
+			left: 42%;
+			display: none;
+
+			.swiper-pagination-bullet {
+				position: relative;
+				height: 24px;
+				width: 24px;
+				border: 1px solid white;
+				border-radius: 100%;
+				margin: 0 5px;
+
+				&:hover {
+					cursor: pointer;
+				}
+			}
+
+			.swiper-pagination-bullet-active {
+				background-color: white;
+			}
+		}
+	}
 `;
 
 const SpanElement = styled.span<Props>`
 	color: white;
 	text-transform: uppercase;
 	position: absolute;
+	z-index: 5;
 	top: ${(props) => (props.path.pathname === "/" ? "30%" : "50%")};
 	font-size: 48px;
 	font-style: normal;
@@ -40,6 +91,10 @@ const SpanElement = styled.span<Props>`
 const YouSpanElement = styled(SpanElement)`
 	font-size: 310px;
 	top: 50%;
+	color: white;
+	position: absolute;
+	z-index: 5;
+	user-select: none;
 `;
 
 const DotsContainer = styled.div`
@@ -47,18 +102,29 @@ const DotsContainer = styled.div`
 	display: flex;
 	top: 30%;
 	left: 41.5%;
-`;
 
-const Dot = styled.div`
-	height: 24px;
-	width: 24px;
-	border: 1px solid white;
-	border-radius: 100%;
-	margin: 0 5px;
+	button {
+		border: 1px solid white;
+		background: transparent;
+		color: white;
+		border-radius: 100%;
+		height: 24px;
+		width: 24px;
+		margin: 0 5px;
+
+		&:hover {
+			cursor: pointer;
+		}
+	}
+
+	.dot-active {
+		background-color: white;
+	}
 `;
 
 const ScrollElement = styled.div`
 	position: absolute;
+	z-index: 5;
 	color: white;
 	bottom: 0;
 	margin-bottom: 30px;
@@ -84,18 +150,53 @@ const SpanScrollElement = styled.div`
 SwiperCore.use([Pagination]);
 
 export const Banner: React.FC = () => {
+	const [slideIndex, setSlideIndex] = useState(1);
 	let location = useLocation();
+	const sliderRef = useRef(null) as any;
+	const sliderItems = [1, 2, 3];
+
+	const moveDot = (index: number) => {
+		setSlideIndex(index);
+	};
 	return (
 		<BannerElement path={location}>
 			{location.pathname === "/" ? (
 				<>
+					<Swiper
+						pagination={{
+							clickable: true,
+						}}
+						onSwiper={(swiper) => {
+							sliderRef.current = swiper;
+						}}
+						className="mySwiper"
+					>
+						<SwiperSlide>
+							<img src={Home1} alt="Banner" />
+						</SwiperSlide>
+						<SwiperSlide>
+							<img src={Home2} alt="Banner" />
+						</SwiperSlide>
+						<SwiperSlide>
+							<img src={Home3} alt="Banner" />
+						</SwiperSlide>
+					</Swiper>
 					<SpanElement path={location}>The space is waiting for</SpanElement>
 					<YouSpanElement path={location}>
 						You
 						<DotsContainer>
-							<Dot />
-							<Dot />
-							<Dot />
+							{sliderItems.map((it, index) => {
+								return (
+									<button
+										key={it}
+										className={slideIndex === index + 1 ? "dot-active" : "dot"}
+										onClick={() => {
+											sliderRef.current?.slideTo(it - 1);
+											moveDot(index + 1);
+										}}
+									></button>
+								);
+							})}
 						</DotsContainer>
 					</YouSpanElement>
 					<ScrollElement onClick={() => window.location.replace("/#tours")}>

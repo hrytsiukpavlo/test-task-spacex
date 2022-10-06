@@ -16,7 +16,7 @@ const HeaderElement = styled.div<Props>`
 	color: white;
 	height: 80px;
 	width: 100%;
-	z-index: 1;
+	z-index: 4;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;

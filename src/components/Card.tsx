@@ -4,11 +4,11 @@ import { PrimaryButton } from "./Buttons/PrimaryButton";
 import { SvgButton } from "./Buttons/SvgButton";
 import darkHeart from "../assets/DarkHeart.svg";
 import trash from "../assets/Delete.svg";
+import { useLocation } from "react-router-dom";
 
 type Props = {
 	image: string;
 	altText: string;
-	isHome: boolean;
 };
 
 const CardWrapper = styled.div`
@@ -50,7 +50,8 @@ const CardWrapper = styled.div`
 	}
 `;
 
-export const Card: React.FC<Props> = ({ image, altText, isHome }) => {
+export const Card: React.FC<Props> = ({ image, altText }) => {
+	let location = useLocation();
 	return (
 		<CardWrapper>
 			<img src={image} alt={altText} />
@@ -60,7 +61,11 @@ export const Card: React.FC<Props> = ({ image, altText, isHome }) => {
 			</div>
 			<div className="buttons">
 				<PrimaryButton width="280px" children="Buy" />
-				<SvgButton icon={isHome ? darkHeart : trash} altText="heart" dimensions="20px" />
+				<SvgButton
+					icon={location.pathname === "/" ? darkHeart : trash}
+					altText="heart"
+					dimensions="20px"
+				/>
 			</div>
 		</CardWrapper>
 	);

@@ -6,9 +6,9 @@ import { Tours } from "../components/Tours";
 export const Home = () => {
 	return (
 		<>
-			<Header isHome={true} />
-			<Banner isHome={true} />
-			<Tours isHome={true} />
+			<Header />
+			<Banner />
+			<Tours />
 		</>
 	);
 };

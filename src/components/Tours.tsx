@@ -3,14 +3,14 @@ import styled from "styled-components";
 import { SvgButton } from "./Buttons/SvgButton";
 import arrowLeft from "../assets/LeftArrow.png";
 import arrowRight from "../assets/RightArrow.png";
-
+import { useLocation } from "react-router-dom";
 import { Card } from "./Card";
 import card1 from "../assets/Home1.jpg";
 import card2 from "../assets/Home2.jpg";
 import card3 from "../assets/Home3.jpg";
 
 type Props = {
-	isHome: boolean;
+	path: any;
 };
 
 const CardsContainer = styled.div<Props>`
@@ -21,7 +21,7 @@ const CardsContainer = styled.div<Props>`
 
 	.header {
 		display: flex;
-		justify-content: ${(props) => (props.isHome ? "space-between" : "flex-end")};
+		justify-content: ${(props) => (props.path.pathname === "/" ? "space-between" : "flex-end")};
 
 		h1 {
 			font-style: normal;
@@ -69,10 +69,11 @@ const CardsContainer = styled.div<Props>`
 	}
 `;
 
-export const Tours: React.FC<Props> = ({ isHome }) => {
+export const Tours: React.FC = () => {
+	let location = useLocation();
 	return (
-		<CardsContainer isHome={isHome}>
-			{isHome ? (
+		<CardsContainer path={location} id="tours">
+			{location.pathname === "/" ? (
 				<div className="header">
 					<h1>Popular tours</h1>
 					<div className="sliderButtons">
@@ -86,17 +87,17 @@ export const Tours: React.FC<Props> = ({ isHome }) => {
 				</div>
 			)}
 			<div className="cards">
-				{isHome ? (
+				{location.pathname === "/" ? (
 					<>
-						<Card image={card1} altText="Tour" isHome={isHome} />
-						<Card image={card2} altText="Tour" isHome={isHome} />
-						<Card image={card3} altText="Tour" isHome={isHome} />
+						<Card image={card1} altText="Tour" />
+						<Card image={card2} altText="Tour" />
+						<Card image={card3} altText="Tour" />
 					</>
 				) : (
-					<Card image={card1} isHome={isHome} altText="Tour" />
+					<Card image={card1} altText="Tour" />
 				)}
 			</div>
-			{isHome && (
+			{location.pathname === "/" && (
 				<div className="circles">
 					<div></div>
 					<div></div>

@@ -6,9 +6,9 @@ import { Tours } from "../components/Tours";
 export const Favourites = () => {
 	return (
 		<>
-			<Header isHome={false} />
-			<Banner isHome={false} />
-			<Tours isHome={false} />
+			<Header />
+			<Banner />
+			<Tours />
 		</>
 	);
 };

@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import { SvgButton } from "./Buttons/SvgButton";
-import arrowLeft from "../assets/LeftArrow.png";
-import arrowRight from "../assets/RightArrow.png";
+import arrowLeft from "../assets/icons/LeftArrow.svg";
+import arrowRight from "../assets/icons/RightArrow.svg";
 import { useLocation } from "react-router-dom";
 import { Card } from "./Card";
 import card1 from "../assets/Home1.jpg";
@@ -77,8 +77,8 @@ export const Tours: React.FC = () => {
 				<div className="header">
 					<h1>Popular tours</h1>
 					<div className="sliderButtons">
-						<SvgButton icon={arrowLeft} altText="arrow" dimensions="40px" />
-						<SvgButton icon={arrowRight} altText="arrow" dimensions="40px" />
+						<SvgButton icon={arrowLeft} altText="arrow" dimensions="24px" />
+						<SvgButton icon={arrowRight} altText="arrow" dimensions="24px" />
 					</div>
 				</div>
 			) : (

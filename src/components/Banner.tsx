@@ -3,8 +3,7 @@ import styled from "styled-components";
 import Home1 from "../assets/Home1.jpg";
 import Home2 from "../assets/Home2.jpg";
 import Home3 from "../assets/Home3.jpg";
-import imgFavourites from "../assets/Home3.jpg";
-import { ReactComponent as DownArrow } from "../assets/DownArrow.svg";
+import { ReactComponent as DownArrow } from "../assets/icons/DownArrow.svg";
 import { useLocation } from "react-router-dom";
 import SwiperCore, { Pagination } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -17,7 +16,7 @@ const BannerElement = styled.div<Props>`
 	width: 100%;
 	height: ${(props) => (props.path.pathname === "/favourites" ? "500px" : "740px")};
 	background: rgba(0, 0, 0, 0.5)
-		url(${(props) => (props.path.pathname === "/favourites" ? imgFavourites : "")});
+		url(${(props) => (props.path.pathname === "/favourites" ? Home3 : "")});
 	background-blend-mode: darken;
 	background-position: ${(props) => (props.path.pathname === "/" ? "center" : "top")};
 	background-repeat: no-repeat;
@@ -111,14 +110,23 @@ const DotsContainer = styled.div`
 		height: 24px;
 		width: 24px;
 		margin: 0 5px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 
 		&:hover {
 			cursor: pointer;
 		}
-	}
 
-	.dot-active {
-		background-color: white;
+		.carouselItem {
+			width: 12px;
+			height: 12px;
+			background-color: white;
+			border-radius: 100%;
+		}
+
+		.dot-active {
+		}
 	}
 `;
 
@@ -194,7 +202,9 @@ export const Banner: React.FC = () => {
 											sliderRef.current?.slideTo(it - 1);
 											moveDot(index + 1);
 										}}
-									></button>
+									>
+										<div className={slideIndex === index + 1 ? "carouselItem" : ""}></div>
+									</button>
 								);
 							})}
 						</DotsContainer>

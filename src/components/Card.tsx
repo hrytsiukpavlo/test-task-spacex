@@ -2,8 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import { PrimaryButton } from "./Buttons/PrimaryButton";
 import { SvgButton } from "./Buttons/SvgButton";
-import darkHeart from "../assets/DarkHeart.svg";
-import trash from "../assets/Delete.svg";
+import darkHeart from "../assets/icons/DarkHeart.svg";
+import trash from "../assets/icons/Delete.svg";
 import { useLocation } from "react-router-dom";
 
 type Props = {

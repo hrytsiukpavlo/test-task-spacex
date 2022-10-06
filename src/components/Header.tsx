@@ -3,8 +3,8 @@ import styled from "styled-components";
 import logo from "../assets/Logo.png";
 import { PrimaryButton } from "./Buttons/PrimaryButton";
 import { SvgButton } from "./Buttons/SvgButton";
-import heart from "../assets/Heart.svg";
-import darkHeart from "../assets/DarkHeart.svg";
+import heart from "../assets/icons/Heart.svg";
+import darkHeart from "../assets/icons/DarkHeart.svg";
 import { Link, useLocation } from "react-router-dom";
 
 type Props = {

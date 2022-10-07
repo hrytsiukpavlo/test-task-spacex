@@ -15,10 +15,9 @@ type Props = {
 const BannerElement = styled.div<Props>`
 	width: 100%;
 	height: ${(props) => (props.path.pathname === "/favourites" ? "500px" : "740px")};
-	background: rgba(0, 0, 0, 0.5)
-		url(${(props) => (props.path.pathname === "/favourites" ? Home3 : "")});
+	background: rgba(0, 0, 0, 0.5) url(${(props) => props.path.pathname === "/favourites" && Home3});
 	background-blend-mode: darken;
-	background-position: ${(props) => (props.path.pathname === "/" ? "center" : "top")};
+	background-position: ${(props) => props.path.pathname === "/favourites" && "top"};
 	background-repeat: no-repeat;
 	background-size: cover;
 	position: relative;
@@ -46,31 +45,7 @@ const BannerElement = styled.div<Props>`
 		}
 
 		.swiper-pagination {
-			border: 1px solid red;
-			z-index: 10;
-			position: absolute;
-			display: flex;
-			justify-content: center;
-			top: 50%;
-			left: 42%;
 			display: none;
-
-			.swiper-pagination-bullet {
-				position: relative;
-				height: 24px;
-				width: 24px;
-				border: 1px solid white;
-				border-radius: 100%;
-				margin: 0 5px;
-
-				&:hover {
-					cursor: pointer;
-				}
-			}
-
-			.swiper-pagination-bullet-active {
-				background-color: white;
-			}
 		}
 	}
 `;
@@ -191,7 +166,7 @@ export const Banner: React.FC = () => {
 					</Swiper>
 					<SpanElement path={location}>The space is waiting for</SpanElement>
 					<YouSpanElement path={location}>
-						You
+						<span>You</span>
 						<DotsContainer>
 							{sliderItems.map((it, index) => {
 								return (

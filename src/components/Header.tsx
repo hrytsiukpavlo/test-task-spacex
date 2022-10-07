@@ -31,6 +31,8 @@ const HeaderElement = styled.div<Props>`
 `;
 
 const LogoElement = styled.img`
+	width: 230px;
+	height: 32px;
 	&:hover {
 		cursor: pointer;
 	}

@@ -1,13 +1,16 @@
-import React from "react";
+import React, { useRef } from "react";
 import styled from "styled-components";
 import { SvgButton } from "./Buttons/SvgButton";
 import arrowLeft from "../assets/icons/LeftArrow.svg";
 import arrowRight from "../assets/icons/RightArrow.svg";
 import { useLocation } from "react-router-dom";
 import { Card } from "./Card";
-import card1 from "../assets/Home1.jpg";
-import card2 from "../assets/Home2.jpg";
-import card3 from "../assets/Home3.jpg";
+import { useQuery } from "@apollo/client";
+import { ALL_HISTORIES } from "../apollo/histories";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination } from "swiper";
+import "swiper/css";
+import "swiper/css/pagination";
 
 type Props = {
 	path: any;
@@ -50,9 +53,45 @@ const CardsContainer = styled.div<Props>`
 	}
 
 	.cards {
-		margin: 40px 0;
+		margin-bottom: 40px;
 		display: flex;
 		justify-content: space-between;
+		position: relative;
+
+		.mySwiper {
+			height: 700px;
+		}
+
+		.swiper-slide {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.swiper-pagination {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+
+			.swiper-pagination-bullet {
+				border: 1px solid black;
+				background: transparent;
+				height: 24px;
+				width: 24px;
+				opacity: 1;
+
+				&:hover {
+					cursor: pointer;
+				}
+			}
+
+			.swiper-pagination-bullet-active {
+				width: 24px;
+				height: 24px;
+				background-color: black;
+				padding: 10px;
+			}
+		}
 	}
 
 	.circles {
@@ -70,15 +109,25 @@ const CardsContainer = styled.div<Props>`
 `;
 
 export const Tours: React.FC = () => {
+	const { loading, error, data } = useQuery(ALL_HISTORIES);
+	if (error) {
+		console.log(error);
+	}
 	let location = useLocation();
+	const sliderRef = useRef(null) as any;
 	return (
 		<CardsContainer path={location} id="tours">
 			{location.pathname === "/" ? (
 				<div className="header">
 					<h1>Popular tours</h1>
 					<div className="sliderButtons">
-						<SvgButton icon={arrowLeft} altText="arrow" dimensions="24px" />
-						<SvgButton icon={arrowRight} altText="arrow" dimensions="24px" />
+						<div onClick={() => sliderRef.current.slidePrev()}>
+							<SvgButton icon={arrowLeft} altText="arrow" dimensions="24px" />
+						</div>
+
+						<div onClick={() => sliderRef.current.slideNext()}>
+							<SvgButton icon={arrowRight} altText="arrow" dimensions="24px" />
+						</div>
 					</div>
 				</div>
 			) : (
@@ -88,22 +137,54 @@ export const Tours: React.FC = () => {
 			)}
 			<div className="cards">
 				{location.pathname === "/" ? (
-					<>
-						<Card image={card1} altText="Tour" />
-						<Card image={card2} altText="Tour" />
-						<Card image={card3} altText="Tour" />
-					</>
+					loading ? (
+						<span>Loading...</span>
+					) : (
+						<>
+							<Swiper
+								slidesPerView={3}
+								slidesPerGroup={3}
+								loop={true}
+								pagination={{
+									clickable: true,
+								}}
+								modules={[Pagination]}
+								className="mySwiper"
+								onSwiper={(swiper) => {
+									sliderRef.current = swiper;
+								}}
+							>
+								{data.histories.map((_: any, index: number) => {
+									if (data.histories[index].flight?.links.flickr_images.length > 0) {
+										return (
+											<SwiperSlide key={data.histories[index].id}>
+												<Card
+													image={data.histories[index].flight.links.flickr_images[0]}
+													title={data.histories[index].title}
+													subtitle={data.histories[index].flight.mission_name}
+												/>
+											</SwiperSlide>
+										);
+									}
+								})}
+							</Swiper>
+						</>
+					)
 				) : (
-					<Card image={card1} altText="Tour" />
+					<Card
+						image={data.histories[1].flight.links.flickr_images[0]}
+						title="123"
+						subtitle="123"
+					/>
 				)}
 			</div>
-			{location.pathname === "/" && (
+			{/* {location.pathname === "/" && (
 				<div className="circles">
 					<div></div>
 					<div></div>
 					<div></div>
 				</div>
-			)}
+			)} */}
 		</CardsContainer>
 	);
 };

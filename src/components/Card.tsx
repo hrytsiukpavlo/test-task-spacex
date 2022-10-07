@@ -8,7 +8,8 @@ import { useLocation } from "react-router-dom";
 
 type Props = {
 	image: string;
-	altText: string;
+	title: string;
+	subtitle: string;
 };
 
 const CardWrapper = styled.div`
@@ -50,14 +51,14 @@ const CardWrapper = styled.div`
 	}
 `;
 
-export const Card: React.FC<Props> = ({ image, altText }) => {
+export const Card: React.FC<Props> = ({ image, title, subtitle }) => {
 	let location = useLocation();
 	return (
 		<CardWrapper>
-			<img src={image} alt={altText} />
+			<img src={image} alt="Tour" />
 			<div className="description">
-				<h4>Extraordinary tour</h4>
-				<p>Lorem ipsum dolor sit amet consectetur adipiscing elit</p>
+				<h4>{title}</h4>
+				<p>{subtitle}</p>
 			</div>
 			<div className="buttons">
 				<PrimaryButton width="280px" children="Buy" />

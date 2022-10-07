@@ -146,6 +146,7 @@ export const Banner: React.FC = () => {
 			{location.pathname === "/" ? (
 				<>
 					<Swiper
+						allowTouchMove={false}
 						pagination={{
 							clickable: true,
 						}}

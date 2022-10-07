@@ -88,22 +88,19 @@ const CardsContainer = styled.div<Props>`
 			.swiper-pagination-bullet-active {
 				width: 24px;
 				height: 24px;
-				background-color: black;
+				// background-color: black;
 				padding: 10px;
+
+				&:after {
+					content: "";
+					position: absolute;
+					width: 12px;
+					height: 12px;
+					border-radius: 50%;
+					background-color: black;
+					transform: translate(-50%, -40%);
+				}
 			}
-		}
-	}
-
-	.circles {
-		display: flex;
-		justify-content: center;
-
-		div {
-			border: 1px solid black;
-			width: 24px;
-			height: 24px;
-			border-radius: 100%;
-			margin-right: 10px;
 		}
 	}
 `;
@@ -178,13 +175,6 @@ export const Tours: React.FC = () => {
 					/>
 				)}
 			</div>
-			{/* {location.pathname === "/" && (
-				<div className="circles">
-					<div></div>
-					<div></div>
-					<div></div>
-				</div>
-			)} */}
 		</CardsContainer>
 	);
 };

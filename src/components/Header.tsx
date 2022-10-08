@@ -92,7 +92,6 @@ export const Header: React.FC = () => {
 				<Link to="/favourites">
 					<SvgButton
 						icon={location.pathname === "/" ? darkHeart : heart}
-						altText="heart"
 						dimensions="20px"
 						bgColor={location.pathname === "/" ? false : true}
 					/>

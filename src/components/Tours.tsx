@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { SvgButton } from "./Buttons/SvgButton";
 import arrowLeft from "../assets/icons/LeftArrow.svg";
 import arrowRight from "../assets/icons/RightArrow.svg";
@@ -11,9 +11,12 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper";
 import "swiper/css";
 import "swiper/css/pagination";
+import { favItemsState } from "../state";
+import { useRecoilState, useRecoilValue } from "recoil";
 
 type Props = {
 	path: any;
+	favItems: any;
 };
 
 const CardsContainer = styled.div<Props>`
@@ -24,7 +27,12 @@ const CardsContainer = styled.div<Props>`
 
 	.header {
 		display: flex;
-		justify-content: ${(props) => (props.path.pathname === "/" ? "space-between" : "flex-end")};
+		justify-content: ${(props) =>
+			props.path.pathname === "/"
+				? "space-between"
+				: props.favItems.length > 0
+				? "flex-end"
+				: "center"};
 
 		h1 {
 			font-style: normal;
@@ -54,9 +62,20 @@ const CardsContainer = styled.div<Props>`
 
 	.cards {
 		margin-bottom: 40px;
-		display: flex;
-		justify-content: space-between;
 		position: relative;
+		display: grid;
+		justify-items: center;
+		grid-template-columns: repeat(3, 1fr);
+		grid-auto-rows: auto;
+		grid-gap: 1rem;
+
+		${(props) =>
+			props.path.pathname === "/" &&
+			css`
+				display: flex;
+				flex-wrap: "nowrap";
+				justify-content: space-between;
+			`}
 
 		.mySwiper {
 			height: 700px;
@@ -88,7 +107,6 @@ const CardsContainer = styled.div<Props>`
 			.swiper-pagination-bullet-active {
 				width: 24px;
 				height: 24px;
-				// background-color: black;
 				padding: 10px;
 
 				&:after {
@@ -103,6 +121,10 @@ const CardsContainer = styled.div<Props>`
 			}
 		}
 	}
+
+	.cards > div {
+		margin-top: ${(props) => (props.path.pathname === "/" ? "0" : "40px")};
+	}
 `;
 
 export const Tours: React.FC = () => {
@@ -112,24 +134,35 @@ export const Tours: React.FC = () => {
 	}
 	let location = useLocation();
 	const sliderRef = useRef(null) as any;
+	const favItems = useRecoilValue<any>(favItemsState);
+	const [items, setItems] = useRecoilState(favItemsState);
+	function handleClearClick() {
+		setItems([]);
+	}
 	return (
-		<CardsContainer path={location} id="tours">
+		<CardsContainer path={location} id="tours" favItems={favItems}>
 			{location.pathname === "/" ? (
 				<div className="header">
 					<h1>Popular tours</h1>
 					<div className="sliderButtons">
 						<div onClick={() => sliderRef.current.slidePrev()}>
-							<SvgButton icon={arrowLeft} altText="arrow" dimensions="24px" />
+							<SvgButton icon={arrowLeft} dimensions="24px" enabled={false} />
 						</div>
 
 						<div onClick={() => sliderRef.current.slideNext()}>
-							<SvgButton icon={arrowRight} altText="arrow" dimensions="24px" />
+							<SvgButton icon={arrowRight} dimensions="24px" enabled={false} />
 						</div>
 					</div>
 				</div>
 			) : (
 				<div className="header">
-					<button className="clearButton">Clear all</button>
+					{favItems.length > 0 ? (
+						<button className="clearButton" onClick={handleClearClick}>
+							Clear all
+						</button>
+					) : (
+						<span>No favourites</span>
+					)}
 				</div>
 			)}
 			<div className="cards">
@@ -159,20 +192,29 @@ export const Tours: React.FC = () => {
 													image={data.histories[index].flight.links.flickr_images[0]}
 													title={data.histories[index].title}
 													subtitle={data.histories[index].flight.mission_name}
+													id={data.histories[index].id}
 												/>
 											</SwiperSlide>
 										);
 									}
+									return null;
 								})}
 							</Swiper>
 						</>
 					)
 				) : (
-					<Card
-						image={data.histories[1].flight.links.flickr_images[0]}
-						title="123"
-						subtitle="123"
-					/>
+					<>
+						{console.log(favItems)}
+						{favItems.map((el: any) => (
+							<Card
+								image={el.image}
+								title={el.title}
+								subtitle={el.subtitle}
+								id={el.id}
+								key={el.id}
+							/>
+						))}
+					</>
 				)}
 			</div>
 		</CardsContainer>

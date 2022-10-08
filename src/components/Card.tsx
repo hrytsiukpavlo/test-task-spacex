@@ -2,14 +2,18 @@ import React from "react";
 import styled from "styled-components";
 import { PrimaryButton } from "./Buttons/PrimaryButton";
 import { SvgButton } from "./Buttons/SvgButton";
+import heart from "../assets/icons/Heart.svg";
 import darkHeart from "../assets/icons/DarkHeart.svg";
 import trash from "../assets/icons/Delete.svg";
 import { useLocation } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import { favItemsState } from "../state";
 
 type Props = {
 	image: string;
 	title: string;
 	subtitle: string;
+	id: number;
 };
 
 const CardWrapper = styled.div`
@@ -51,8 +55,9 @@ const CardWrapper = styled.div`
 	}
 `;
 
-export const Card: React.FC<Props> = ({ image, title, subtitle }) => {
+export const Card: React.FC<Props> = ({ image, title, subtitle, id }) => {
 	let location = useLocation();
+	const favItems = useRecoilValue<any>(favItemsState);
 	return (
 		<CardWrapper>
 			<img src={image} alt="Tour" />
@@ -63,9 +68,19 @@ export const Card: React.FC<Props> = ({ image, title, subtitle }) => {
 			<div className="buttons">
 				<PrimaryButton width="280px" children="Buy" />
 				<SvgButton
-					icon={location.pathname === "/" ? darkHeart : trash}
-					altText="heart"
+					icon={
+						location.pathname === "/"
+							? favItems.find((el: any) => el.id === id)
+								? heart
+								: darkHeart
+							: trash
+					}
+					enabled={true}
 					dimensions="20px"
+					image={image}
+					title={title}
+					subtitle={subtitle}
+					id={id}
 				/>
 			</div>
 		</CardWrapper>

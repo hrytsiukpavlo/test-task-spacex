@@ -6,6 +6,7 @@ import { createGlobalStyle } from "styled-components";
 import { BrowserRouter } from "react-router-dom";
 import { ApolloProvider } from "@apollo/client";
 import client from "./apollo/client";
+import { RecoilRoot } from "recoil";
 
 const Global = createGlobalStyle`
 * {
@@ -23,7 +24,9 @@ root.render(
 		<Global />
 		<BrowserRouter>
 			<ApolloProvider client={client}>
-				<App />
+				<RecoilRoot>
+					<App />
+				</RecoilRoot>
 			</ApolloProvider>
 		</BrowserRouter>
 	</>,

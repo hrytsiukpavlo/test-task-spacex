@@ -141,6 +141,7 @@ export const Banner: React.FC = () => {
 	const moveDot = (index: number) => {
 		setSlideIndex(index);
 	};
+
 	return (
 		<BannerElement path={location}>
 			{location.pathname === "/" ? (

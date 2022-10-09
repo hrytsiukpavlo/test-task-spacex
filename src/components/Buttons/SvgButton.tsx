@@ -56,16 +56,20 @@ export const SvgButton: React.FC<Props> = ({
 	let location = useLocation();
 	const setFavsItem = useSetRecoilState(favItemsState);
 	const [items, setItems] = useRecoilState(favItemsState);
+
 	function handleFavClick(image: string, title: string, subtitle: string, id: number) {
 		setFavsItem((oldFavs) => {
 			return [...oldFavs, { image, title, subtitle, id }];
 		});
 	}
+
 	function handleDelClick() {
 		const newItems = items.filter((item) => item.id !== id);
 		setItems(newItems);
 	}
+
 	const favItems = useRecoilValue<any>(favItemsState);
+
 	return (
 		<SvgButtonElement
 			path={location}
@@ -78,7 +82,14 @@ export const SvgButton: React.FC<Props> = ({
 				location.pathname === "/"
 					? enabled
 						? () =>
-								handleFavClick(image as string, title as string, subtitle as string, id as number)
+								favItems.find((el: any) => el.id === id)
+									? handleDelClick()
+									: handleFavClick(
+											image as string,
+											title as string,
+											subtitle as string,
+											id as number,
+									  )
 						: () => null
 					: () => handleDelClick()
 			}

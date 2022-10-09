@@ -129,16 +129,20 @@ const CardsContainer = styled.div<Props>`
 
 export const Tours: React.FC = () => {
 	const { loading, error, data } = useQuery(ALL_HISTORIES);
+
 	if (error) {
 		console.log(error);
 	}
+
 	let location = useLocation();
 	const sliderRef = useRef(null) as any;
 	const favItems = useRecoilValue<any>(favItemsState);
 	const [items, setItems] = useRecoilState(favItemsState);
+
 	function handleClearClick() {
 		setItems([]);
 	}
+
 	return (
 		<CardsContainer path={location} id="tours" favItems={favItems}>
 			{location.pathname === "/" ? (

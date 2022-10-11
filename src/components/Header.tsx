@@ -78,16 +78,16 @@ export const Header: React.FC = () => {
 			<Link to="/">
 				<LogoElement src={logo} alt="Logo" />
 			</Link>
-			{pathname === "/" && (
-				<NavigationElement>
-					<ul>
-						<li>Home</li>
-						<li>Tours</li>
-						<li>About</li>
-						<li>Help</li>
-					</ul>
-				</NavigationElement>
-			)}
+
+			<NavigationElement>
+				<ul>
+					<li>Home</li>
+					<li>Tours</li>
+					<li>About</li>
+					<li>Help</li>
+				</ul>
+			</NavigationElement>
+
 			<div className="buttons">
 				<Link to="/favourites">
 					<SvgButton

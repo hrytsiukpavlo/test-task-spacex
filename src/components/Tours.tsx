@@ -191,6 +191,7 @@ export const Tours: React.FC = () => {
 						<>
 							{console.log(data)}
 							<Swiper
+								allowTouchMove={false}
 								slidesPerView={3}
 								slidesPerGroup={3}
 								loop={true}

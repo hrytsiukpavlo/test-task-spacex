@@ -78,7 +78,6 @@ export const Header: React.FC = () => {
 			<Link to="/">
 				<LogoElement src={logo} alt="Logo" />
 			</Link>
-
 			<NavigationElement>
 				<ul>
 					<li>Home</li>
@@ -87,7 +86,6 @@ export const Header: React.FC = () => {
 					<li>Help</li>
 				</ul>
 			</NavigationElement>
-
 			<div className="buttons">
 				<Link to="/favourites">
 					<SvgButton

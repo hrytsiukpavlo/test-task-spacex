@@ -8,12 +8,13 @@ import trash from "../assets/icons/Delete.svg";
 import { useLocation } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { favItemsState } from "../state";
+import { ICard } from "../state";
 
 type Props = {
 	image: string;
 	title: string;
 	subtitle: string;
-	id: number;
+	id: string;
 };
 
 const CardWrapper = styled.div`
@@ -57,7 +58,7 @@ const CardWrapper = styled.div`
 
 export const Card: React.FC<Props> = ({ image, title, subtitle, id }) => {
 	let location = useLocation();
-	const favItems = useRecoilValue<any>(favItemsState);
+	const favItems = useRecoilValue<ICard[]>(favItemsState);
 	return (
 		<CardWrapper>
 			<img src={image} alt="Tour" />
@@ -70,7 +71,7 @@ export const Card: React.FC<Props> = ({ image, title, subtitle, id }) => {
 				<SvgButton
 					icon={
 						location.pathname === "/"
-							? favItems.find((el: any) => el.id === id)
+							? favItems.find((el: ICard) => el.id === id)
 								? heart
 								: darkHeart
 							: trash

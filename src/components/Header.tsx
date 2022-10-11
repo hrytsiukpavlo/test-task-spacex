@@ -8,7 +8,7 @@ import darkHeart from "../assets/icons/DarkHeart.svg";
 import { Link, useLocation } from "react-router-dom";
 
 type Props = {
-	path: any;
+	pathname: string;
 };
 
 const HeaderElement = styled.div<Props>`
@@ -21,7 +21,7 @@ const HeaderElement = styled.div<Props>`
 	align-items: center;
 	justify-content: space-between;
 	padding: 0 80px;
-	background-color: rgba(0, 0, 0, ${(props) => (props.path.pathname === "/" ? 0.4 : 1)});
+	background-color: rgba(0, 0, 0, ${(props) => (props.pathname === "/" ? 0.4 : 1)});
 
 	.buttons {
 		display: flex;
@@ -72,13 +72,13 @@ const NavigationElement = styled.nav`
 `;
 
 export const Header: React.FC = () => {
-	let location = useLocation();
+	const { pathname } = useLocation();
 	return (
-		<HeaderElement path={location}>
+		<HeaderElement pathname={pathname}>
 			<Link to="/">
 				<LogoElement src={logo} alt="Logo" />
 			</Link>
-			{location.pathname === "/" && (
+			{pathname === "/" && (
 				<NavigationElement>
 					<ul>
 						<li>Home</li>
@@ -91,9 +91,9 @@ export const Header: React.FC = () => {
 			<div className="buttons">
 				<Link to="/favourites">
 					<SvgButton
-						icon={location.pathname === "/" ? darkHeart : heart}
+						icon={pathname === "/" ? darkHeart : heart}
 						dimensions="20px"
-						bgColor={location.pathname === "/" ? false : true}
+						bgColor={pathname === "/" ? false : true}
 					/>
 				</Link>
 				<PrimaryButton width="160px" children="Sign in" />

@@ -9,15 +9,15 @@ import SwiperCore, { Pagination } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 type Props = {
-	path: any;
+	pathname: string;
 };
 
 const BannerElement = styled.div<Props>`
 	width: 100%;
-	height: ${(props) => (props.path.pathname === "/favourites" ? "500px" : "740px")};
-	background: rgba(0, 0, 0, 0.5) url(${(props) => props.path.pathname === "/favourites" && Home3});
+	height: ${(props) => (props.pathname === "/favourites" ? "500px" : "740px")};
+	background: rgba(0, 0, 0, 0.5) url(${(props) => props.pathname === "/favourites" && Home3});
 	background-blend-mode: darken;
-	background-position: ${(props) => props.path.pathname === "/favourites" && "top"};
+	background-position: ${(props) => props.pathname === "/favourites" && "top"};
 	background-repeat: no-repeat;
 	background-size: cover;
 	position: relative;
@@ -55,7 +55,7 @@ const SpanElement = styled.span<Props>`
 	text-transform: uppercase;
 	position: absolute;
 	z-index: 5;
-	top: ${(props) => (props.path.pathname === "/" ? "30%" : "50%")};
+	top: ${(props) => (props.pathname === "/" ? "30%" : "50%")};
 	font-size: 48px;
 	font-style: normal;
 	font-weight: 800;
@@ -134,7 +134,7 @@ SwiperCore.use([Pagination]);
 
 export const Banner: React.FC = () => {
 	const [slideIndex, setSlideIndex] = useState(1);
-	let location = useLocation();
+	const { pathname } = useLocation();
 	const sliderRef = useRef(null) as any;
 	const sliderItems = [1, 2, 3];
 
@@ -143,8 +143,8 @@ export const Banner: React.FC = () => {
 	};
 
 	return (
-		<BannerElement path={location}>
-			{location.pathname === "/" ? (
+		<BannerElement pathname={pathname}>
+			{pathname === "/" ? (
 				<>
 					<Swiper
 						allowTouchMove={false}
@@ -166,8 +166,8 @@ export const Banner: React.FC = () => {
 							<img src={Home3} alt="Banner" />
 						</SwiperSlide>
 					</Swiper>
-					<SpanElement path={location}>The space is waiting for</SpanElement>
-					<YouSpanElement path={location}>
+					<SpanElement pathname={pathname}>The space is waiting for</SpanElement>
+					<YouSpanElement pathname={pathname}>
 						<span>You</span>
 						<DotsContainer>
 							{sliderItems.map((it, index) => {
@@ -186,13 +186,13 @@ export const Banner: React.FC = () => {
 							})}
 						</DotsContainer>
 					</YouSpanElement>
-					<ScrollElement onClick={() => window.location.replace("/#tours")}>
+					<ScrollElement onClick={() => window.location.replace("#tours")}>
 						<SpanScrollElement>Explore tours</SpanScrollElement>
 						<DownArrow />
 					</ScrollElement>
 				</>
 			) : (
-				<SpanElement path={location}>Favourites</SpanElement>
+				<SpanElement pathname={pathname}>Favourites</SpanElement>
 			)}
 		</BannerElement>
 	);

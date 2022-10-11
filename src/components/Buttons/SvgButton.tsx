@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { useSetRecoilState, useRecoilState, useRecoilValue } from "recoil";
 import { favItemsState } from "../../state";
+import { ICard } from "../../state";
 
 type Props = {
 	icon: string;
@@ -12,17 +13,17 @@ type Props = {
 	image?: string;
 	title?: string;
 	subtitle?: string;
-	id?: number;
-	path?: any;
-	favItems?: any;
+	id?: string;
+	pathname?: string;
+	favItems?: ICard[];
 };
 
 const SvgButtonElement = styled.div<Props>`
 	width: 40px;
 	height: 40px;
 	background-color: ${(props) =>
-		props.path.pathname === "/"
-			? props.favItems.find((el: any) => el.id === props.id)
+		props.pathname === "/"
+			? props?.favItems?.find((el: ICard) => el.id === props.id)
 				? "#DD377D"
 				: "#ececec"
 			: props.bgColor
@@ -53,11 +54,11 @@ export const SvgButton: React.FC<Props> = ({
 	subtitle,
 	id,
 }) => {
-	let location = useLocation();
+	const { pathname } = useLocation();
 	const setFavsItem = useSetRecoilState(favItemsState);
 	const [items, setItems] = useRecoilState(favItemsState);
 
-	function handleFavClick(image: string, title: string, subtitle: string, id: number) {
+	function handleFavClick(image: string, title: string, subtitle: string, id: string) {
 		setFavsItem((oldFavs) => {
 			return [...oldFavs, { image, title, subtitle, id }];
 		});
@@ -68,33 +69,33 @@ export const SvgButton: React.FC<Props> = ({
 		setItems(newItems);
 	}
 
-	const favItems = useRecoilValue<any>(favItemsState);
+	const favItems = useRecoilValue<ICard[]>(favItemsState);
 
 	return (
 		<SvgButtonElement
-			path={location}
-			id={id as any}
+			pathname={pathname}
+			id={id}
 			favItems={favItems}
 			dimensions={dimensions}
 			icon={icon}
 			bgColor={bgColor}
 			onClick={
-				location.pathname === "/"
+				pathname === "/"
 					? enabled
 						? () =>
-								favItems.find((el: any) => el.id === id)
+								favItems.find((el: ICard) => el.id === id)
 									? handleDelClick()
 									: handleFavClick(
 											image as string,
 											title as string,
 											subtitle as string,
-											id as number,
+											id as string,
 									  )
 						: () => null
 					: () => handleDelClick()
 			}
 		>
-			<img src={icon} alt={location.pathname === "/" ? "heart" : "delete"} />
+			<img src={icon} alt={pathname === "/" ? "heart" : "delete"} />
 		</SvgButtonElement>
 	);
 };

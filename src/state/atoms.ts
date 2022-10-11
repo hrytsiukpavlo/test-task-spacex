@@ -1,13 +1,13 @@
 import { atom } from "recoil";
 
-type Card = {
+export interface ICard {
 	image: string;
 	title: string;
 	subtitle: string;
-	id: number;
-};
+	id: string;
+}
 
 export const favItemsState = atom({
 	key: "flightsState",
-	default: [] as Card[],
+	default: [] as ICard[],
 });

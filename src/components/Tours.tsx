@@ -13,10 +13,28 @@ import "swiper/css";
 import "swiper/css/pagination";
 import { favItemsState } from "../state";
 import { useRecoilState, useRecoilValue } from "recoil";
+import { ICard } from "../state";
 
 type Props = {
-	path: any;
-	favItems: any;
+	pathname: string;
+	favItems: ICard[];
+};
+
+type Flight = {
+	links: {
+		flickr_images: string[];
+	};
+	mission_name: string;
+};
+
+type Histories = {
+	flight: Flight;
+	id: string;
+	title: string;
+};
+
+type SpacexData = {
+	histories: Array<Histories>;
 };
 
 const CardsContainer = styled.div<Props>`
@@ -28,11 +46,7 @@ const CardsContainer = styled.div<Props>`
 	.header {
 		display: flex;
 		justify-content: ${(props) =>
-			props.path.pathname === "/"
-				? "space-between"
-				: props.favItems.length > 0
-				? "flex-end"
-				: "center"};
+			props.pathname === "/" ? "space-between" : props.favItems.length > 0 ? "flex-end" : "center"};
 
 		h1 {
 			font-style: normal;
@@ -70,7 +84,7 @@ const CardsContainer = styled.div<Props>`
 		grid-gap: 1rem;
 
 		${(props) =>
-			props.path.pathname === "/" &&
+			props.pathname === "/" &&
 			css`
 				display: flex;
 				flex-wrap: "nowrap";
@@ -123,20 +137,20 @@ const CardsContainer = styled.div<Props>`
 	}
 
 	.cards > div {
-		margin-top: ${(props) => (props.path.pathname === "/" ? "0" : "40px")};
+		margin-top: ${(props) => (props.pathname === "/" ? "0" : "40px")};
 	}
 `;
 
 export const Tours: React.FC = () => {
-	const { loading, error, data } = useQuery(ALL_HISTORIES);
+	const { loading, error, data } = useQuery<SpacexData>(ALL_HISTORIES);
 
 	if (error) {
 		console.log(error);
 	}
 
-	let location = useLocation();
+	const { pathname } = useLocation();
 	const sliderRef = useRef(null) as any;
-	const favItems = useRecoilValue<any>(favItemsState);
+	const favItems = useRecoilValue<ICard[]>(favItemsState);
 	const [items, setItems] = useRecoilState(favItemsState);
 
 	function handleClearClick() {
@@ -144,8 +158,8 @@ export const Tours: React.FC = () => {
 	}
 
 	return (
-		<CardsContainer path={location} id="tours" favItems={favItems}>
-			{location.pathname === "/" ? (
+		<CardsContainer pathname={pathname} id="tours" favItems={favItems}>
+			{pathname === "/" ? (
 				<div className="header">
 					<h1>Popular tours</h1>
 					<div className="sliderButtons">
@@ -170,11 +184,12 @@ export const Tours: React.FC = () => {
 				</div>
 			)}
 			<div className="cards">
-				{location.pathname === "/" ? (
+				{pathname === "/" ? (
 					loading ? (
 						<span>Loading...</span>
 					) : (
 						<>
+							{console.log(data)}
 							<Swiper
 								slidesPerView={3}
 								slidesPerGroup={3}
@@ -188,15 +203,15 @@ export const Tours: React.FC = () => {
 									sliderRef.current = swiper;
 								}}
 							>
-								{data.histories.map((_: any, index: number) => {
-									if (data.histories[index].flight?.links.flickr_images.length > 0) {
+								{data?.histories.map((item: Histories) => {
+									if (item && item?.flight?.links.flickr_images.length > 0) {
 										return (
-											<SwiperSlide key={data.histories[index].id}>
+											<SwiperSlide key={item.id}>
 												<Card
-													image={data.histories[index].flight.links.flickr_images[0]}
-													title={data.histories[index].title}
-													subtitle={data.histories[index].flight.mission_name}
-													id={data.histories[index].id}
+													image={item?.flight.links.flickr_images[0]}
+													title={item.title}
+													subtitle={item?.flight.mission_name}
+													id={item.id}
 												/>
 											</SwiperSlide>
 										);
@@ -208,8 +223,7 @@ export const Tours: React.FC = () => {
 					)
 				) : (
 					<>
-						{console.log(favItems)}
-						{favItems.map((el: any) => (
+						{favItems.map((el: ICard) => (
 							<Card
 								image={el.image}
 								title={el.title}
